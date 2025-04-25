@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1004342015106",
+    "project_id": "newgroplus",
+    "storage_bucket": "newgroplus.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004342015106:android:3e861a39b415e52ffbf09b",
+        "android_client_info": {
+          "package_name": "com.shuja.grocery_plus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAevauHv2G77ii02PDlkUfyYvBbpynP9hU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

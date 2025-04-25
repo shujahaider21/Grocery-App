@@ -1,0 +1,2 @@
+D:/FlutterProjects/grocery_plus-main/android/app/.cxx/Debug/47m13f4y/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/FlutterProjects/grocery_plus-main/android/app/.cxx/Debug/47m13f4y/armeabi-v7a/CMakeFiles/rebuild_cache.dir
