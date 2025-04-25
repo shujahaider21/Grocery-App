@@ -16,7 +16,7 @@ Future<String> uploadImageToFirebaseStorage(XFile image) async {
     String downloadUrl = await taskSnapshot.ref.getDownloadURL();
     return downloadUrl;
   } catch (e) {
-    print("image upload nai hota hai $e");
+    print("Error while uploading image$e");
     return "";
   }
 }
