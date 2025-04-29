@@ -49,7 +49,7 @@ class _UploadItemsState extends State<UploadItems> {
           name: nameController.text,
           //  imageUrl: imageUrl,
           imageUrl:
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsSbG1mGCWdPOEB3p9EroMTDk7T4lMOY-Lxg&s",
+              "https://hips.hearstapps.com/hmg-prod/images/whm100123feaprotein-010-64f9d39a02264.jpg?crop=1.00xw:0.669xh;0,0.191xh&resize=1200:*",
           descritpion: diController.text,
           price: priceController.text,
           productId: productId);

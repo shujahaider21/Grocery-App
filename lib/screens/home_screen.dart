@@ -100,9 +100,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       mainAxisSpacing: 20),
                               itemBuilder: (context, index) {
                                 return HomeCardWidget(
-                                  imageUrl: item.vegtable[index]['image'],
-                                  title: item.vegtable[index]['title'],
-                                  rating: item.vegtable[index]['rating'],
+                                  imageUrl: itemsList[index].imageUrl,
+                                  title: itemsList[index].name,
+                                  rating: "0",
                                   ontap: () {
                                     Navigator.push(
                                         context,
