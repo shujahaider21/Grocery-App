@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_plus/Models/grocery_model.dart';
 import 'package:grocery_plus/constants/colors.dart';
-import 'package:grocery_plus/screens/favorite_screen.dart';
 import 'package:grocery_plus/widgets/primary_button.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -18,7 +17,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   var firestore = FirebaseFirestore.instance;
   var auth = FirebaseAuth.instance;
   bool isLoading = false;
-  bool isFavorite = false;
+  bool inWishList = false;
   Future<void> addToCart() async {
     setState(() {
       isLoading = true;
@@ -46,6 +45,88 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  Future<void> addToWishList() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      Items items = Items(
+          name: widget.items.name,
+          imageUrl: widget.items.imageUrl,
+          descritpion: widget.items.descritpion,
+          price: widget.items.price,
+          productId: widget.items.productId);
+      await firestore
+          .collection('users')
+          .doc(auth.currentUser!.uid)
+          .collection('wishlist')
+          .doc(widget.items.productId)
+          .set(items.toJson());
+      setState(() {
+        isLoading = false;
+        inWishList = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Item added to wishlist"),
+        backgroundColor: AppColors.primaryColor,
+      ));
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> checkWishList() async {
+    try {
+      var docSnapshot = await firestore
+          .collection('Users')
+          .doc(auth.currentUser!.uid)
+          .collection('wishList')
+          .doc(widget.items.productId)
+          .get();
+      if (docSnapshot.exists) {
+        setState(() {
+          inWishList = true;
+        });
+      } else {
+        setState(() {
+          inWishList = false;
+        });
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> removeFromWishlist() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      await firestore
+          .collection('Users')
+          .doc(auth.currentUser!.uid)
+          .collection('wishList')
+          .doc(widget.items.productId)
+          .delete();
+      setState(() {
+        isLoading = false;
+        inWishList = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Item removed form wishlist"),
+        backgroundColor: AppColors.primaryColor,
+      ));
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    checkWishList();
+    super.initState();
   }
 
   @override
@@ -84,29 +165,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         children: [
                           InkWell(
                             onTap: () {
-                              setState(() {
-                                isFavorite = !isFavorite;
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    isFavorite
-                                        ? "Added to Favorite"
-                                        : "Removed from Favorite",
-                                  ),
-                                  duration: Duration(seconds: 3),
-                                  backgroundColor: AppColors.primaryColor,
-                                ),
-                              );
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => FavoriteScreen()),
-                              );
+                              if (inWishList) {
+                                removeFromWishlist();
+                              } else {
+                                addToWishList();
+                              }
                             },
                             child: Icon(
                               Icons.favorite,
-                              color: isFavorite ? Colors.red : Colors.white,
+                              color: inWishList
+                                  ? Colors.red
+                                  : AppColors.whiteColor,
                             ),
                           ),
                         ],

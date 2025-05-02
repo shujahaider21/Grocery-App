@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_plus/constants/colors.dart';
-import 'package:grocery_plus/screens/product_detail.dart';
 import 'package:grocery_plus/screens/splash_screen.dart';
 
 Future<void> main() async {
