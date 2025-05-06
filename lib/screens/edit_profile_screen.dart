@@ -15,6 +15,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     var nameController =
         TextEditingController(text: widget.currentUser.username);
+    var emailController = TextEditingController(text: widget.currentUser.email);
+    var phoneController = TextEditingController(text: widget.currentUser.phone);
 
     return Scaffold(
       body: SafeArea(
@@ -28,7 +30,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     "https://www.pngall.com/wp-content/uploads/5/Avatar-Profile-PNG-Clipart.png"),
                 child: const Icon(Icons.camera_alt_outlined),
               ),
-              CustomTextField(hintText: 'hintText', controller: nameController)
+              const SizedBox(height: 16),
+              CustomTextField(hintText: 'hintText', controller: nameController),
+              const SizedBox(height: 16),
+              CustomTextField(
+                  hintText: 'hintText', controller: emailController),
+              const SizedBox(height: 16),
+              CustomTextField(
+                  hintText: 'hintText', controller: phoneController),
             ],
           ),
         ),
