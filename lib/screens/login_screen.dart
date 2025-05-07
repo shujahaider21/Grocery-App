@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -115,6 +116,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       title: "Next",
                       icon: Icons.arrow_forward,
                       ontap: () {
+                        if (emailController.text.isEmpty ||
+                            passwordController.text.isEmpty) {
+                          Get.snackbar(
+                            "Error",
+                            "Please fill all the fields",
+                          );
+                          return;
+                        }
                         authController.loginUser(
                             emailController.text, passwordController.text);
                       },

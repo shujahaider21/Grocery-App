@@ -20,6 +20,7 @@ class AuthController extends GetxController {
           "Error",
           "Please fill all the fields",
         );
+        Get.back();
         return;
       }
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
@@ -27,6 +28,7 @@ class AuthController extends GetxController {
       if (userCredential.user != null && userCredential.user!.emailVerified) {
         Get.offAll(() => BottomNavBar());
       } else {
+        Get.back();
         Get.snackbar("Error", "Please verify your email first",
             snackPosition: SnackPosition.BOTTOM);
       }
