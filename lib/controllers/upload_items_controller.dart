@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grocery_plus/Models/grocery_model.dart';
 import 'package:grocery_plus/screens/bottom_Nav_bar.dart';
-import 'package:grocery_plus/upload_image.dart';
 import 'package:grocery_plus/widgets/loading_dialog_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
