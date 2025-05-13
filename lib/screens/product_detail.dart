@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grocery_plus/Models/grocery_model.dart';
 import 'package:grocery_plus/constants/colors.dart';
+import 'package:grocery_plus/controllers/product_detail_controller.dart';
 import 'package:grocery_plus/widgets/primary_button.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -18,34 +20,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   var auth = FirebaseAuth.instance;
   bool isLoading = false;
   bool inWishList = false;
-  Future<void> addToCart() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      Items items = Items(
-          name: widget.items.name,
-          imageUrl: widget.items.imageUrl,
-          descritpion: widget.items.descritpion,
-          price: widget.items.price,
-          productId: widget.items.productId);
-      await firestore
-          .collection("Users")
-          .doc(auth.currentUser!.uid)
-          .collection('cartItems')
-          .doc(widget.items.productId)
-          .set(items.toJson());
-      setState(() {
-        isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Item added to cart"),
-        backgroundColor: AppColors.primaryColor,
-      ));
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
 
   Future<void> addToWishList() async {
     setState(() {
@@ -61,7 +35,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       await firestore
           .collection('users')
           .doc(auth.currentUser!.uid)
-          .collection('wishlist')
+          .collection('wishList')
           .doc(widget.items.productId)
           .set(items.toJson());
       setState(() {
@@ -99,7 +73,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
   }
 
-  Future<void> removeFromWishlist() async {
+  Future<void> removeFromWishList() async {
     setState(() {
       isLoading = true;
     });
@@ -115,7 +89,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         inWishList = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Item removed form wishlist"),
+        content: Text("Item removed from wishlist"),
         backgroundColor: AppColors.primaryColor,
       ));
     } catch (e) {
@@ -124,13 +98,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   @override
-  void initState() {
-    checkWishList();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    var controller =
+        Get.put(ProductDetailController(productId: widget.items.productId));
+
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -142,7 +113,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         centerTitle: true,
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
           : Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -164,20 +137,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           InkWell(
-                            onTap: () {
-                              if (inWishList) {
-                                removeFromWishlist();
-                              } else {
-                                addToWishList();
-                              }
-                            },
-                            child: Icon(
-                              Icons.favorite,
-                              color: inWishList
-                                  ? Colors.red
-                                  : AppColors.whiteColor,
-                            ),
-                          ),
+                              onTap: () {
+                                if (inWishList) {
+                                  removeFromWishList();
+                                } else {}
+                              },
+                              child: Obx(
+                                () => Icon(
+                                  Icons.favorite,
+                                  color: controller.inWishList.value
+                                      ? Colors.red
+                                      : AppColors.whiteColor,
+                                ),
+                              )),
                         ],
                       ),
                     ),
@@ -213,7 +185,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     children: [
                       InkWell(
                         onTap: () {
-                          addToCart();
+                          controller.addToCart(
+                              widget.items.name,
+                              widget.items.imageUrl,
+                              widget.items.descritpion,
+                              widget.items.price,
+                              widget.items.productId);
                         },
                         child: Container(
                           height: 60,
