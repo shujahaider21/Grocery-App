@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
-import 'package:get/utils.dart';
+import 'package:get/get.dart';
 import 'package:grocery_plus/Models/user_model.dart';
 import 'package:grocery_plus/controllers/user_controller.dart';
 import 'package:grocery_plus/screens/change_password_screen.dart';
 import 'package:grocery_plus/screens/edit_profile_screen.dart';
-import 'package:grocery_plus/screens/login_screen.dart';
+// import 'package:grocery_plus/screens/login_screen.dart';
 import 'package:grocery_plus/widgets/profile_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -52,12 +51,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 leadingIcon: Icons.edit,
                 title: "Edit Profile",
                 ontap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (c) => EditProfileScreen(
-                                currentUser: userController.userModel.value!,
-                              )));
+                  Get.to(() => EditProfileScreen(
+                        currentUser: userController.userModel.value!,
+                      ));
                 }),
             const SizedBox(
               height: 20,
@@ -69,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (c) => const ChangePasswordScreen()));
+                          builder: (c) => const ChangePasswordSceen()));
                 }),
             const SizedBox(
               height: 20,

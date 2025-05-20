@@ -20,7 +20,6 @@ class AuthController extends GetxController {
           "Error",
           "Please fill all the fields",
         );
-        Get.back();
         return;
       }
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
@@ -28,7 +27,6 @@ class AuthController extends GetxController {
       if (userCredential.user != null && userCredential.user!.emailVerified) {
         Get.offAll(() => BottomNavBar());
       } else {
-        Get.back();
         Get.snackbar("Error", "Please verify your email first",
             snackPosition: SnackPosition.BOTTOM);
       }
@@ -50,6 +48,8 @@ class AuthController extends GetxController {
         userCredential.user!.sendEmailVerification();
         Get.snackbar("Verfied", "Verification email sent to $email",
             snackPosition: SnackPosition.TOP);
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(content: Text("Verification email sent to ${email}")));
         UserModel userData = UserModel(
             uid: auth.currentUser!.uid,
             username: name,
@@ -64,6 +64,49 @@ class AuthController extends GetxController {
     } on FirebaseAuthException catch (e) {
       Get.back();
       debugPrint(e.code);
+    } finally {
+      Get.back();
+    }
+  }
+
+  Future<void> changePassword(
+      String email, String oldPassword, String newPassword) async {
+    Get.dialog(LoadingDialogWidget(), barrierDismissible: false);
+    try {
+      User? user = auth.currentUser;
+      if (user == null) {
+        Get.back();
+        Get.snackbar("Error", "User not found");
+
+        return;
+      }
+      var credential =
+          EmailAuthProvider.credential(email: email, password: oldPassword);
+      await user.reauthenticateWithCredential(credential);
+      await user.updatePassword(newPassword);
+      Get.back();
+      Get.snackbar("Changed", "Password has been Changed");
+    } catch (e) {
+      Get.back();
+      debugPrint("this is the error$e");
+    }
+  }
+
+  sendlinkForResetPassword(String email) async {
+    if (email.isEmpty) {
+      Get.snackbar("Error", "Please Enter Your Email");
+
+      return;
+    }
+    Get.dialog(LoadingDialogWidget(), barrierDismissible: false);
+    try {
+      await auth.sendPasswordResetEmail(email: email);
+
+      Get.back();
+      Get.snackbar("Success", "Password Reset Link Sent Successfully");
+    } on FirebaseAuthException catch (e) {
+      Get.back();
+      debugPrint("this is the error${e.code}");
     } finally {
       Get.back();
     }
