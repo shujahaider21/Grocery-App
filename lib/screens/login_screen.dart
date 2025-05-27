@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.w500,
                           color: AppColors.fontColor,
                         )),
-                    Text("Grocery Plus",
+                    Text("GROCERY PLUS",
                         style: GoogleFonts.poppins(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
